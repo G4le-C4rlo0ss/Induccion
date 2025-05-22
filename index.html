@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚠¡¡ALERTA DE SEGURIDAD!!⚠</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+    body {
+      background: #000;
+      color: #f00;
+      font-family: 'Audiowide', cursive;
+      text-align: center;
+      padding: 50px;
+      background-image: 
+        radial-gradient(circle, #300000 1px, transparent 1px),
+        linear-gradient(to bottom, #300000, #000);
+      background-size: 30px 30px, 100% 100%;
+    }
+    h1 {
+      font-size: 3em;
+      text-shadow: 0 0 20px #f00;
+      animation: glitch 1s infinite;
+    }
+    @keyframes glitch {
+      0% { text-shadow: 0 0 10px #f00; }
+      50% { text-shadow: 0 0 30px #f00; }
+      100% { text-shadow: 0 0 10px #f00; }
+    }
+  </style>
+</head>
+<body>
+  <h1>⚠¡¡ACCESO NO AUTORIZADO!!⚠</h1>
+  <p>SE HA INFECTADO TU DISPOSITIVO</p>
+
+  <script>
+    // Capturar datos y enviar al backend
+    async function logAccess() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userEmail = urlParams.get('email') || 'anonimo@example.com';
+      
+      try {
+        const response = await fetch('/log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: userEmail,
+            ip: await fetch('https://api.ipify.org?format=json').then(res => res.json()).then(data => data.ip),
+            user_agent: navigator.userAgent
+          })
+        });
+        
+        if (!response.ok) throw new Error('Error en el servidor');
+      } catch (error) {
+        console.error("Error al registrar acceso:", error);
+      }
+    }
+
+    // Ejecutar al cargar la página
+    window.onload = logAccess;
+  </script>
+</body>
+</html>
